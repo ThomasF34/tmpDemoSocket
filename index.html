@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <ul id="messages">
+    </ul>
+
+    <input id='message'>
+    <button onclick="submitMessage()" type="button">Envoyer</button>
+
+    <script src="/socket.io/socket.io.js"></script> <!-- Equivalent de import 'socket.io-client' dans React -->
+    <script>
+      const socket = io(); // connection en socketIO vers localhost:3000 -> a la connexion, la socket emet un evenement 'connection'
+      socket.emit('felicitation-connection');
+
+      socket.on('message-received', (message) => {
+        console.log(`nouveau message ${message}`);
+        document.querySelector('#messages').append(`<li>${message}</li>`);
+      })
+
+      function submitMessage(){
+        console.log('Submitting');
+        const message = document.querySelector('#message').value;
+        console.log('Emiting ' + message);
+
+        socket.emit('new-message', message);
+      }
+    </script>
+  </body>
+</html>
